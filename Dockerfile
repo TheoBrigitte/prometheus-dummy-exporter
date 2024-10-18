@@ -1,9 +1,9 @@
 FROM quay.io/prometheus/busybox:latest
 LABEL maintainer="theo.brigitte@gmail.com"
 
-COPY example/simple.yml /etc/dummy_exporter.yml
-COPY ./prometheus-dummy-exporter /bin/dummy_exporter
+COPY example/simple.yml /etc/prometheus-dummy-exporter.yaml
+COPY ./prometheus-dummy-exporter /bin/prometheus-dummy-exporter
 
 EXPOSE 9510
-ENTRYPOINT ["/bin/dummy_exporter"]
-CMD ["--config=/etc/dummy_exporter.yml"]
+ENTRYPOINT ["/bin/prometheus-dummy-exporter"]
+CMD ["--config=/etc/prometheus-dummy-exporter.yaml"]
