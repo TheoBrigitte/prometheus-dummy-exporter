@@ -1,14 +1,9 @@
 GOPATH     ?= $(shell go env GOPATH)
-DEP        ?= $(GOPATH)/bin/dep
 GORELEASER ?= $(GOPATH)/bin/goreleaser
 VERSION    := v$(shell cat VERSION)
 
 .PHONY: setup test build build-snapshot sync-tag release docker-build docker-release
 all: setup test build build-snapshot sync-tag release docker-build docker-release
-
-setup: $(DEP)
-	@echo '>> setup'
-	@$(DEP) ensure -v
 
 test:
 	@echo '>> unit test'
@@ -16,7 +11,7 @@ test:
 
 build:
 	@echo '>> build'
-	@go build -ldflags='\
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='\
 	-X github.com/kobtea/dummy_exporter/vendor/github.com/prometheus/common/version.Version=$(shell cat VERSION) \
 	-X github.com/kobtea/dummy_exporter/vendor/github.com/prometheus/common/version.Revision=$(shell git rev-parse HEAD) \
 	-X github.com/kobtea/dummy_exporter/vendor/github.com/prometheus/common/version.Branch=$(shell git rev-parse --abbrev-ref HEAD) \
@@ -48,17 +43,13 @@ release: $(GORELEASER)
 
 docker-build:
 	@echo '>> build docker image'
-	@docker build -t kobtea/dummy_exporter:$(shell cat VERSION) .
-	@docker build -t kobtea/dummy_exporter:latest .
+	@docker build -t theo01/dummy_exporter:$(shell cat VERSION) .
+	@docker build -t theo01/dummy_exporter:latest .
 
 docker-release: docker-build
 	@echo '>> release docker image'
-	@docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}
-	@docker push kobtea/dummy_exporter:$(shell cat VERSION)
-	@docker push kobtea/dummy_exporter:latest
-
-$(DEP):
-	curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+	@docker push theo01/dummy_exporter:$(shell cat VERSION)
+	@docker push theo01/dummy_exporter:latest
 
 $(GORELEASER):
 	@wget -O - "https://github.com/goreleaser/goreleaser/releases/download/v0.98.0/goreleaser_$(shell uname -o | cut -d'/' -f2)_$(shell uname -m).tar.gz" | tar xvzf - -C /tmp
