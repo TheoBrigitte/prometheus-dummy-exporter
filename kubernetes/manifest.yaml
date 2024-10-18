@@ -1,0 +1,105 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-dummy-exporter
+data:
+  dummy_exporter.yml: |
+    metrics:
+    - name: alice
+      type: gauge
+      size: 50
+    - name: bob
+      type: counter
+      size: 50
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: prometheus-dummy-exporter
+  name: prometheus-dummy-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-dummy-exporter
+  template:
+    metadata:
+      labels:
+        app: prometheus-dummy-exporter
+    spec:
+      containers:
+      - image: kobtea/dummy_exporter
+        args:
+        - --config=/srv/dummy_exporter.yml
+        imagePullPolicy: IfNotPresent
+        name: prometheus-dummy-exporter
+        ports:
+        - containerPort: 9510
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9510
+            scheme: HTTP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9510
+            scheme: HTTP
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - name: config
+          mountPath: /srv/
+      volumes:
+      - name: config
+        configMap:
+          name: prometheus-dummy-exporter
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-dummy-exporter
+  labels:
+    app: prometheus-dummy-exporter
+spec:
+  ports:
+  - port: 9510
+    protocol: TCP
+    targetPort: 9510
+    name: metrics
+  selector:
+    app: prometheus-dummy-exporter
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: prometheus-dummy-exporter
+  name: prometheus-dummy-exporter
+spec:
+  endpoints:
+  - interval: 10s
+    path: /metrics
+    port: metrics
+  selector:
+    matchLabels:
+      app: prometheus-dummy-exporter
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus-dummy-exporter
+spec:
+  endpointSelector:
+    matchLabels:
+      app: prometheus-dummy-exporter
+  ingress:
+  - toPorts:
+    - ports:
+      - port: "9510"
+        protocol: TCP
