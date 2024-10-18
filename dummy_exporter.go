@@ -2,17 +2,18 @@ package main
 
 import (
 	"fmt"
-	"github.com/kobtea/dummy_exporter/pkg/config"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/prometheus/common/log"
-	"github.com/prometheus/common/version"
-	"gopkg.in/alecthomas/kingpin.v2"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/alecthomas/kingpin/v2"
+	"github.com/kobtea/dummy_exporter/pkg/config"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/version"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -103,7 +104,6 @@ func (collector collector) Collect(ch chan<- prometheus.Metric) {
 }
 
 func main() {
-	log.AddFlags(kingpin.CommandLine)
 	kingpin.Version(version.Print("dummy_exporter"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
