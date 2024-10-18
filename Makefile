@@ -41,7 +41,7 @@ release: $(GORELEASER)
 	BUILD_DATE=$(shell date +%Y%m%d-%H:%M:%S) \
 	$(GORELEASER) release --rm-dist --debug
 
-docker-build:
+docker-build: build
 	@echo '>> build docker image'
 	@docker build -t theo01/dummy_exporter:$(shell cat VERSION) .
 	@docker build -t theo01/dummy_exporter:latest .
