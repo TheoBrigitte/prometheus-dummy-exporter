@@ -7,7 +7,11 @@ all: setup test build build-snapshot sync-tag release docker-build docker-releas
 
 test:
 	@echo '>> unit test'
-	@go test ./...
+	go test ./...
+
+bench:
+	@echo '>> benchmark'
+	go test -bench=. -benchtime=5x ./...
 
 build:
 	@echo '>> build'
