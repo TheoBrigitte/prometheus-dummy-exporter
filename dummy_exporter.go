@@ -63,5 +63,5 @@ func main() {
 	})
 
 	log.Infoln("listening on", *listenAddress)
-	log.Fatal(http.ListenAndServe(*listenAddress, nil))
+	log.Fatal(http.ListenAndServe(*listenAddress, nil)) // nolint:gosec
 }

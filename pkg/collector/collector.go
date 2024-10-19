@@ -3,9 +3,8 @@ package collector
 import (
 	"fmt"
 	"maps"
-	"math/rand"
+	"math/rand/v2"
 	"slices"
-	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 
@@ -25,10 +24,6 @@ type gauge struct {
 type counter struct {
 	config config.Metric
 	vec    *prometheus.CounterVec
-}
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
 }
 
 func New(conf *config.Config) (*collector, error) {
@@ -93,7 +88,7 @@ func (c *collector) Collect(ch chan<- prometheus.Metric) {
 	for _, gauge := range c.gauges {
 		for i := 0; i < gauge.config.Size; i++ {
 			labels := gauge.config.GenerateLabels(i)
-			gauge.vec.With(labels).Set(rand.Float64())
+			gauge.vec.With(labels).Set(rand.Float64()) //nolint:gosec
 			gauge.vec.With(labels).Collect(ch)
 		}
 	}
