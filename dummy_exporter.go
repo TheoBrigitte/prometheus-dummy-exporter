@@ -24,9 +24,12 @@ func main() {
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 
-	conf, err := config.NewFromFile(*configFile)
-	if err != nil {
-		log.Fatalf("failed to read config file: %v", err)
+	conf := config.New()
+	if *configFile != "" {
+		err := conf.ReadFromFile(*configFile)
+		if err != nil {
+			log.Fatalf("failed to read config file: %v", err)
+		}
 	}
 
 	collector, err := collector.New(conf)
