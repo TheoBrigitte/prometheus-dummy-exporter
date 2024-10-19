@@ -115,9 +115,13 @@ func main() {
 
 	collector, err := newCollector(namespace, conf.Metrics)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to create collector: %v", err)
 	}
-	prometheus.MustRegister(collector)
+
+	err = prometheus.Register(collector)
+	if err != nil {
+		log.Fatalf("failed to register collector: %v", err)
+	}
 
 	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
