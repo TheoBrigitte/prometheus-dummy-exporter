@@ -1,6 +1,10 @@
 package config
 
-import "sigs.k8s.io/yaml"
+import (
+	"os"
+
+	"sigs.k8s.io/yaml"
+)
 
 type Config struct {
 	Metrics []Metric `yaml:"metrics"`
@@ -13,10 +17,20 @@ type Metric struct {
 	Labels map[string][]string `yaml:"labels"`
 }
 
+func NewFromFile(configFile string) (*Config, error) {
+	buf, err := os.ReadFile(configFile)
+	if err != nil {
+		return nil, err
+	}
+
+	return Parse(buf)
+}
+
 func Parse(buf []byte) (*Config, error) {
 	var c Config
 	if err := yaml.Unmarshal(buf, &c); err != nil {
 		return nil, err
 	}
+
 	return &c, nil
 }
