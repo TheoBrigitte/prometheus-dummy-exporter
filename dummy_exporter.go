@@ -105,7 +105,7 @@ func (collector collector) Collect(ch chan<- prometheus.Metric) {
 }
 
 func main() {
-	kingpin.Version(version.Print("dummy_exporter"))
+	kingpin.Version(version.Print("prometheus-dummy-exporter"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 
