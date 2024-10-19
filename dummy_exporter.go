@@ -9,11 +9,12 @@ import (
 	"time"
 
 	"github.com/alecthomas/kingpin/v2"
-	"github.com/kobtea/dummy_exporter/pkg/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/version"
 	log "github.com/sirupsen/logrus"
+
+	"github.com/TheoBrigitte/prometheus-dummy-exporter/pkg/config"
 )
 
 const (
