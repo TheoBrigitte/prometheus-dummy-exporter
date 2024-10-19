@@ -7,7 +7,7 @@ require (
 	github.com/prometheus/client_golang v1.20.5
 	github.com/prometheus/common v0.60.0
 	github.com/sirupsen/logrus v1.9.3
-	gopkg.in/yaml.v2 v2.4.0
+	sigs.k8s.io/yaml v1.4.0
 )
 
 require (

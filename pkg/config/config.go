@@ -1,6 +1,6 @@
 package config
 
-import "gopkg.in/yaml.v2"
+import "sigs.k8s.io/yaml"
 
 type Config struct {
 	Metrics []Metric `yaml:"metrics"`
