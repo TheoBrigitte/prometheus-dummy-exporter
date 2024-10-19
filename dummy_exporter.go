@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/alecthomas/kingpin/v2"
@@ -17,12 +18,26 @@ var (
 	listenAddress = kingpin.Flag("web.listen-address", "Address to listen on for web interface and telemetry").Default(":9510").String()
 	metricsPath   = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
 	configFile    = kingpin.Flag("config", "Path to config file").Default("").String()
+	logLevel      = kingpin.Flag("log.level", fmt.Sprintf("Log level: %v", logLevelsString())).Default(log.InfoLevel.String()).String()
 )
+
+func logLevelsString() (levels []string) {
+	for _, level := range log.AllLevels {
+		levels = append(levels, level.String())
+	}
+	return
+}
 
 func main() {
 	kingpin.Version(version.Print("prometheus-dummy-exporter"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
+
+	level, err := log.ParseLevel(*logLevel)
+	if err != nil {
+		log.Fatalf("failed to parse log level: %v", err)
+	}
+	log.SetLevel(level)
 
 	conf := config.New()
 	if *configFile != "" {
