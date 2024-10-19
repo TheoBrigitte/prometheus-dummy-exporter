@@ -9,7 +9,6 @@
   <a href="https://github.com/TheoBrigitte/prometheus-dummy-exporter/actions/workflows/test.yaml"><img src="https://github.com/TheoBrigitte/prometheus-dummy-exporter/actions/workflows/test.yaml/badge.svg?branch=main" alt="Github action"></a>
 </p>
 
-# prometheus-dummy-exporter
 
 ## Overview
 
