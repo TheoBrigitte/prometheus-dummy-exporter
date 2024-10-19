@@ -11,12 +11,12 @@ test:
 
 build:
 	@echo '>> build'
-	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='\
-	-X github.com/kobtea/dummy_exporter/vendor/github.com/prometheus/common/version.Version=$(shell cat VERSION) \
-	-X github.com/kobtea/dummy_exporter/vendor/github.com/prometheus/common/version.Revision=$(shell git rev-parse HEAD) \
-	-X github.com/kobtea/dummy_exporter/vendor/github.com/prometheus/common/version.Branch=$(shell git rev-parse --abbrev-ref HEAD) \
-	-X github.com/kobtea/dummy_exporter/vendor/github.com/prometheus/common/version.BuildUser=$(shell whoami)@$(shell hostname) \
-	-X github.com/kobtea/dummy_exporter/vendor/github.com/prometheus/common/version.BuildDate=$(shell date +%Y%m%d-%H:%M:%S)' \
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags=" \
+	-X github.com/prometheus/common/version.Version=$(shell cat VERSION) \
+	-X github.com/prometheus/common/version.Revision=$(shell git rev-parse HEAD) \
+	-X github.com/prometheus/common/version.Branch=$(shell git rev-parse --abbrev-ref HEAD) \
+	-X github.com/prometheus/common/version.BuildUser=$(shell whoami)@$(shell hostname) \
+	-X github.com/prometheus/common/version.BuildDate=$(shell date +%Y%m%d-%H:%M:%S)" \
 	./
 
 build-snapshot: $(GORELEASER)
