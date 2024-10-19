@@ -16,10 +16,6 @@ import (
 	"github.com/TheoBrigitte/prometheus-dummy-exporter/pkg/config"
 )
 
-const (
-	namespace = "dummy"
-)
-
 var (
 	listenAddress = kingpin.Flag("web.listen-address", "Address to listen on for web interface and telemetry").Default(":9510").String()
 	metricsPath   = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
@@ -37,11 +33,11 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func newCollector(namespace string, metrics []config.Metric) (*collector, error) {
+func newCollector(conf *config.Config) (*collector, error) {
 	c := map[string]config.Metric{}
 	counters := map[string]*prometheus.CounterVec{}
 	gauges := map[string]*prometheus.GaugeVec{}
-	for _, metric := range metrics {
+	for _, metric := range conf.Metrics {
 		var keys []string
 		for k := range metric.Labels {
 			keys = append(keys, k)
@@ -51,13 +47,13 @@ func newCollector(namespace string, metrics []config.Metric) (*collector, error)
 		switch metric.Type {
 		case "counter":
 			counters[metric.Name] = prometheus.NewCounterVec(prometheus.CounterOpts{
-				Namespace: namespace,
+				Namespace: conf.Namespace,
 				Name:      metric.Name,
 				Help:      "dummy counter",
 			}, keys)
 		case "gauge":
 			gauges[metric.Name] = prometheus.NewGaugeVec(prometheus.GaugeOpts{
-				Namespace: namespace,
+				Namespace: conf.Namespace,
 				Name:      metric.Name,
 				Help:      "dummy gauge",
 			}, keys)
@@ -66,7 +62,7 @@ func newCollector(namespace string, metrics []config.Metric) (*collector, error)
 		}
 	}
 	return &collector{
-		namespace: namespace,
+		namespace: conf.Namespace,
 		config:    c,
 		counters:  counters,
 		gauges:    gauges,
@@ -113,7 +109,7 @@ func main() {
 		log.Fatalf("failed to read config file: %v", err)
 	}
 
-	collector, err := newCollector(namespace, conf.Metrics)
+	collector, err := newCollector(conf)
 	if err != nil {
 		log.Fatalf("failed to create collector: %v", err)
 	}

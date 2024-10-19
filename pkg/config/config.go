@@ -6,8 +6,15 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
+var (
+	defaultConfig = Config{
+		Namespace: "dummy",
+	}
+)
+
 type Config struct {
-	Metrics []Metric `yaml:"metrics"`
+	Metrics   []Metric `yaml:"metrics"`
+	Namespace string   `yaml:"namespace"`
 }
 
 type Metric struct {
@@ -23,11 +30,7 @@ func NewFromFile(configFile string) (*Config, error) {
 		return nil, err
 	}
 
-	return Parse(buf)
-}
-
-func Parse(buf []byte) (*Config, error) {
-	var c Config
+	var c = defaultConfig
 	if err := yaml.Unmarshal(buf, &c); err != nil {
 		return nil, err
 	}
