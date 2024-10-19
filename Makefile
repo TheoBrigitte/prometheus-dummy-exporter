@@ -27,12 +27,6 @@ build-snapshot: $(GORELEASER)
 	BUILD_DATE=$(shell date +%Y%m%d-%H:%M:%S) \
 	$(GORELEASER) release --snapshot --rm-dist --debug
 
-sync-tag:
-	@git config user.name  || git config --local user.name  "circleci-job"
-	@git config user.email || git config --local user.email "kobtea9696@gmail.com"
-	@git rev-parse $(VERSION) > /dev/null 2>&1 || \
-	(git tag -a $(VERSION) -m "release $(VERSION)" && git push origin $(VERSION))
-
 release: $(GORELEASER)
 	@echo '>> release'
 	BUILD_BRANCH=$(shell git rev-parse --abbrev-ref HEAD) \
@@ -43,13 +37,13 @@ release: $(GORELEASER)
 
 docker-build: build
 	@echo '>> build docker image'
-	@docker build -t theo01/dummy_exporter:$(shell cat VERSION) .
-	@docker build -t theo01/dummy_exporter:latest .
+	@docker build -t theo01/prometheus-dummy-exporter:$(shell cat VERSION) .
+	@docker build -t theo01/prometheus-dummy-exporter:latest .
 
 docker-release: docker-build
 	@echo '>> release docker image'
-	@docker push theo01/dummy_exporter:$(shell cat VERSION)
-	@docker push theo01/dummy_exporter:latest
+	@docker push theo01/prometheus-dummy-exporter:$(shell cat VERSION)
+	@docker push theo01/prometheus-dummy-exporter:latest
 
 $(GORELEASER):
 	@wget -O - "https://github.com/goreleaser/goreleaser/releases/download/v0.98.0/goreleaser_$(shell uname -o | cut -d'/' -f2)_$(shell uname -m).tar.gz" | tar xvzf - -C /tmp
