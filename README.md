@@ -1,7 +1,15 @@
-# prometheus-dummy-exporter
+<p align="center">
+    <img src="assets/prometheus-dummy-exporter.png" alt="prometheus-dummy-exporter" height="100px">
+</p>
 
-[![CircleCI](https://circleci.com/gh/kobtea/dummy_exporter.svg?style=svg)](https://circleci.com/gh/kobtea/dummy_exporter)
-[![Go Report Card](https://goreportcard.com/badge/github.com/kobtea/dummy_exporter)](https://goreportcard.com/report/github.com/kobtea/dummy_exporter)
+<p align="center">
+  <a href="https://goreportcard.com/report/github.com/TheoBrigitte/prometheus-dummy-exporter"><img src="https://goreportcard.com/badge/github.com/TheoBrigitte/prometheus-dummy-exporter" alt="Go Report Card"></a>
+  <a href="https://github.com/TheoBrigitte/prometheus-dummy-exporter/releases"><img src="https://img.shields.io/github/release/TheoBrigitte/prometheus-dummy-exporter"></a>
+  <a href="https://hub.docker.com/r/theo01/prometheus-dummy-exporter"><img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/theo01/prometheus-dummy-exporter"></a>
+  <a href="https://github.com/TheoBrigitte/prometheus-dummy-exporter/actions/workflows/test.yaml"><img src="https://github.com/TheoBrigitte/prometheus-dummy-exporter/actions/workflows/test.yaml/badge.svg?branch=main" alt="Github action"></a>
+</p>
+
+# prometheus-dummy-exporter
 
 ## Overview
 
