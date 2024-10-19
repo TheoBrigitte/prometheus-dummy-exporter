@@ -1,10 +1,11 @@
+namespace: simple
 metrics:
-- name: foo
-  type: gauge
-  size: 5
-- name: bar
+- name: alice
   type: counter
-  size: 10
+  size: 2
+- name: bob
+  type: gauge
+  size: 8
   labels:
-    l1: [one, two, three]
-    l2: [aaa]
+    foo: [one, two]
+    bar: [three, four]
