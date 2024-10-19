@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strconv"
 
 	"sigs.k8s.io/yaml"
 )
@@ -36,4 +37,13 @@ func NewFromFile(configFile string) (*Config, error) {
 	}
 
 	return &c, nil
+}
+
+func (m *Metric) GenerateLabels(i int) map[string]string {
+	labels := map[string]string{"id": strconv.Itoa(i)}
+	for key, vals := range m.Labels {
+		labels[key] = vals[i%len(vals)]
+	}
+
+	return labels
 }
