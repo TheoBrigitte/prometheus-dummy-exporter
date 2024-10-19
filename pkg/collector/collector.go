@@ -40,7 +40,7 @@ func New(conf *config.Config) (*collector, error) {
 		keys = append([]string{"id"}, keys...)
 
 		switch metric.Type {
-		case "counter":
+		case config.MetricTypeCounter:
 			c := counter{
 				config: metric,
 				vec: prometheus.NewCounterVec(prometheus.CounterOpts{
@@ -50,7 +50,7 @@ func New(conf *config.Config) (*collector, error) {
 				}, keys),
 			}
 			counters = append(counters, c)
-		case "gauge":
+		case config.MetricTypeGauge:
 			g := gauge{
 				config: metric,
 				vec: prometheus.NewGaugeVec(prometheus.GaugeOpts{

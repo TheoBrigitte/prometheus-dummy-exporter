@@ -20,7 +20,7 @@ type Config struct {
 
 type Metric struct {
 	Name   string              `yaml:"name"`
-	Type   string              `yaml:"type"`
+	Type   MetricType          `yaml:"type"`
 	Size   int                 `yaml:"size"`
 	Labels map[string][]string `yaml:"labels"`
 }
