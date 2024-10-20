@@ -35,6 +35,12 @@ archives:
       - goos: windows
         format: zip
 
+dockers:
+  - image_templates:
+      - theo01/prometheus-dummy-exporter
+    extra_files:
+      - example/simple.yml
+
 changelog:
   sort: asc
   filters:
