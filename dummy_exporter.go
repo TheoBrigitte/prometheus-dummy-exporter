@@ -32,6 +32,7 @@ func main() {
 	kingpin.Version(version.Print("prometheus-dummy-exporter"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
+	log.Infof("starting %s", version.Info())
 
 	level, err := log.ParseLevel(*logLevel)
 	if err != nil {
